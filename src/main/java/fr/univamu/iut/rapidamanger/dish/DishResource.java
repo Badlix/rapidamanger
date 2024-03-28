@@ -45,8 +45,8 @@ public class DishResource {
         return service.getAllDishsJSON();
     }
 
-    @GET
+    /*@GET
     @Path("/{id}")
     @Produces("application/json")
-    public String getDish
+    public String getDish*/
 }
