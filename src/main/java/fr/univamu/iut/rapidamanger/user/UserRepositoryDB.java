@@ -14,24 +14,8 @@ public class UserRepositoryDB implements UserRepositoryInterface, Closeable {
      */
     protected Connection dbConnection ;
 
-    /**
-     * Constructeur de la classe
-     * @param infoConnection chaîne de caractères avec les informations de connexion
-     *                       (p.ex. jdbc:mariadb://mysql-[compte].alwaysdata.net/[compte]_library_db
-     * @param user chaîne de caractères contenant l'identifiant de connexion à la base de données
-     * @param pwd chaîne de caractères contenant le mot de passe à utiliser
-     */
-    public UserRepositoryDB(String infoConnection, String user, String pwd ) throws SQLException, ClassNotFoundException {
-        Class.forName("org.mariadb.jdbc.Driver");
-        dbConnection = DriverManager.getConnection( infoConnection, user, pwd ) ;
-    }
-
     public UserRepositoryDB(Connection connection) {
         this.dbConnection = connection;
-    }
-
-    public void setDbConnection(Connection dbConnection) {
-        this.dbConnection = dbConnection;
     }
 
     @Override
@@ -107,7 +91,7 @@ public class UserRepositoryDB implements UserRepositoryInterface, Closeable {
 
     @Override
     public boolean updateUser(String id, String name, String password, String address) {
-        String query = "";
+        String query;
 
         if (password != null) {
             query = "UPDATE User SET name=?, password=?, address=? where id=?";
