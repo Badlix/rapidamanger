@@ -34,4 +34,20 @@ public interface DishRepositoryInterface {
      * @return true si le plat existe et la mise à jours a été faite, false sinon
      */
     public boolean updateDish( String id, String name, String description, String price);
+
+    /**
+     * Méthode permettant de supprimer un plat
+     * @param id id du plat à supprimer
+     * @return true si le plat a pu être supprimé
+     */
+    public boolean deleteDish( String id );
+
+    /**
+     * Méthode permettant de creer un plat
+     * @param name nom du plat à creer
+     * @param description description du plat à creer
+     * @param price prix du plat à creer
+     * @return l'id du plat crée
+     */
+    public String createDish( String name, String description, String price );
 }

@@ -1,10 +1,8 @@
 package fr.univamu.iut.rapidamanger.dish;
 
-import jakarta.json.bind.Jsonb;
-import jakarta.json.bind.JsonbBuilder;
-import jakarta.ws.rs.GET;
-import jakarta.ws.rs.Path;
-import jakarta.ws.rs.Produces;
+import jakarta.ws.rs.*;
+import jakarta.ws.rs.core.Response;
+import org.json.JSONObject;
 
 @Path("/dish")
 public class DishResource {
@@ -40,13 +38,84 @@ public class DishResource {
      */
     @GET
     @Produces("application/json")
-    public String getAllDishs() {
-        Jsonb jsonb = JsonbBuilder.create();
-        return service.getAllDishsJSON();
+    public Response getAllDishs() {
+        return Response.ok(service.getAllDishsJSON()).build();
     }
 
-    /*@GET
-    @Path("/{id}")
+    @GET
+    @Path("{id}")
     @Produces("application/json")
-    public String getDish*/
+    public Response getDish(@PathParam("id") String id) {
+
+        String result = service.getDishJSON(id);
+
+        // si le plat n'a pas été trouvé
+        if( result == null )
+            return Response.status(Response.Status.NOT_FOUND).build();
+
+        return Response.ok(result).build();
+    }
+
+    @DELETE
+    @Path("{id}")
+    @Produces("application/json")
+    public Response deleteDish(@PathParam("id") String id) {
+
+        String result = service.deleteDish(id);
+
+        // si le plat n'a pas été trouvé
+        if( result == null )
+            return Response.status(Response.Status.NOT_FOUND).build();
+
+        return Response.ok(result).build();
+    }
+
+    @POST
+    @Consumes("application/json")
+    @Produces("application/json")
+    public Response createDish(String dishJson) {
+        JSONObject obj = new JSONObject(dishJson);
+
+        String result = service.createDish(obj.getString("name"), obj.getString("description"), obj.getString("price"));
+
+        // si la création a échoué
+        if( result == null )
+            return Response.status(Response.Status.BAD_REQUEST).build();
+
+        return Response.ok(result).build();
+    }
+
+    @PUT
+    @Path("{id}")
+    @Consumes("application/json")
+    @Produces("application/json")
+    public Response updateDish(@PathParam("id") String id, String dishJson) {
+        JSONObject newValueOfDish = new JSONObject(dishJson);
+        JSONObject currentDish = new JSONObject(service.getDishJSON(id));
+
+        // Initiate with the current value of the dish
+        String name = currentDish.getString("name");
+        String description = currentDish.getString("description");
+        String price = currentDish.getString("price");
+
+        // Change the value present in the body of the PUT request with the new value
+        if (newValueOfDish.has("name")) {
+            name = newValueOfDish.getString("name");
+        }
+        if (newValueOfDish.has("description")) {
+            description = newValueOfDish.getString("description");
+        }
+        if (newValueOfDish.has("price")) {
+            price = newValueOfDish.getString("price");
+        }
+
+        String result = service.updateDish(id, name, description, price);
+
+        // si le plat n'a pas été trouvé ou que la modification a échoué
+        if( result == null )
+            return Response.status(Response.Status.NOT_FOUND).build();
+
+        return Response.ok(result).build();
+    }
+
 }

@@ -1,4 +1,4 @@
-package fr.univamu.iut.rapidamanger.dish;
+package fr.univamu.iut.rapidamanger.user;
 
 import java.io.Closeable;
 import java.sql.*;
@@ -7,7 +7,7 @@ import java.util.ArrayList;
 /**
  * Classe permettant d'accèder aux livres stockés dans une base de données Mariadb
  */
-public class DishRepositoryDB implements DishRepositoryInterface, Closeable {
+public class UserRepositoryDB implements UserRepositoryInterface, Closeable {
 
     /**
      * Accès à la base de données (session)
@@ -21,13 +21,17 @@ public class DishRepositoryDB implements DishRepositoryInterface, Closeable {
      * @param user chaîne de caractères contenant l'identifiant de connexion à la base de données
      * @param pwd chaîne de caractères contenant le mot de passe à utiliser
      */
-    public DishRepositoryDB(String infoConnection, String user, String pwd ) throws SQLException, ClassNotFoundException {
+    public UserRepositoryDB(String infoConnection, String user, String pwd ) throws SQLException, ClassNotFoundException {
         Class.forName("org.mariadb.jdbc.Driver");
         dbConnection = DriverManager.getConnection( infoConnection, user, pwd ) ;
     }
 
-    public DishRepositoryDB(Connection connection) {
+    public UserRepositoryDB(Connection connection) {
         this.dbConnection = connection;
+    }
+
+    public void setDbConnection(Connection dbConnection) {
+        this.dbConnection = dbConnection;
     }
 
     @Override
@@ -41,11 +45,11 @@ public class DishRepositoryDB implements DishRepositoryInterface, Closeable {
     }
 
     @Override
-    public Dish getDish(String id) {
+    public User getUser(String id) {
 
-        Dish selectedDish = null;
+        User selectedUser = null;
 
-        String query = "SELECT * FROM Dish WHERE id=?";
+        String query = "SELECT * FROM User WHERE id=?";
 
         // construction et exécution d'une requête préparée
         try ( PreparedStatement ps = dbConnection.prepareStatement(query) ){
@@ -59,61 +63,72 @@ public class DishRepositoryDB implements DishRepositoryInterface, Closeable {
             if( result.next() )
             {
                 String name = result.getString("name");
-                String description = result.getString("description");
-                String price = result.getString("price");
+                String address = result.getString("address");
 
-                // création et initialisation de l'objet Dish
-                selectedDish = new Dish(id, name, description, price);
+                // création et initialisation de l'objet User
+                selectedUser = new User(id, name, address);
             }
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
-        return selectedDish;
+        return selectedUser;
     }
 
     @Override
-    public ArrayList<Dish> getAllDishs() {
-        ArrayList<Dish> listDishs ;
+    public ArrayList<User> getAllUsers() {
+        ArrayList<User> listUsers;
 
-        String query = "SELECT * FROM Dish";
+        String query = "SELECT * FROM User";
 
         // construction et exécution d'une requête préparée
         try ( PreparedStatement ps = dbConnection.prepareStatement(query) ){
             // exécution de la requête
             ResultSet result = ps.executeQuery();
 
-            listDishs = new ArrayList<>();
+            listUsers = new ArrayList<>();
 
             // récupération du premier (et seul) tuple résultat
             while ( result.next() )
             {
                 String id = result.getString("id");
                 String name = result.getString("name");
-                String description = result.getString("description");
-                String price = result.getString("price");
+                String address = result.getString("address");
 
                 // création du plat courant
-                Dish currentDish = new Dish(id, name, description, price);
+                User currentUser = new User(id, name, address);
 
-                listDishs.add(currentDish);
+                listUsers.add(currentUser);
             }
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
-        return listDishs;
+        return listUsers;
     }
 
     @Override
-    public boolean updateDish(String id, String name, String description, String price) {
-        String query = "UPDATE Dish SET name=?, description=?, price=?  where id=?";
+    public boolean updateUser(String id, String name, String password, String address) {
+        String query = "";
+
+        if (password != null) {
+            query = "UPDATE User SET name=?, password=?, address=? where id=?";
+        } else {
+            query = "UPDATE User SET name=?, address=? where id=?";
+        }
+
         int nbRowModified = 0;
 
         // construction et exécution d'une requête préparée
         try ( PreparedStatement ps = dbConnection.prepareStatement(query) ){
             ps.setString(1, name);
-            ps.setString(2, description);
-            ps.setString(3, price);
-            ps.setString(4, id);
+
+            if (password != null) {
+                ps.setString(2, password);
+                ps.setString(3, address);
+                ps.setString(4, id);
+            } else {
+                ps.setString(2, address);
+                ps.setString(3, id);
+            }
 
             // exécution de la requête
             nbRowModified = ps.executeUpdate();
@@ -125,8 +140,8 @@ public class DishRepositoryDB implements DishRepositoryInterface, Closeable {
     }
 
     @Override
-    public boolean deleteDish(String id) {
-        String query = "DELETE FROM Dish where id=?";
+    public boolean deleteUser(String id) {
+        String query = "DELETE FROM User where id=?";
         int nbRowModified = 0;
 
         // construction et exécution d'une requête préparée
@@ -142,18 +157,18 @@ public class DishRepositoryDB implements DishRepositoryInterface, Closeable {
         return ( nbRowModified != 0 );
     }
 
-    // curl --request POST --header "Content-Type: application/json" --data '{"name":"testN", "description":"testD", "price":"4"}' http://localhost:8080/rapidamanger-1.0-SNAPSHOT/api/dish
+    // curl --request POST --header "Content-Type: application/json" --data '{"name":"testN", "password":"mdp", "address":"13090 Aix-en-Provence"}' http://localhost:8080/rapidamanger-1.0-SNAPSHOT/api/user
     @Override
-    public String createDish(String name, String description, String price) {
-        String query = "INSERT INTO `Dish`(`name`, `description`, `price`) VALUES (?,?,?)";
+    public String createUser(String name, String password, String address) {
+        String query = "INSERT INTO `User`(`name`, `password`, `address`) VALUES (?,?,?)";
         int newId = -1;
         int nbRowModified = 0;
 
         // construction et exécution d'une requête préparée
         try ( PreparedStatement ps = dbConnection.prepareStatement(query, Statement.RETURN_GENERATED_KEYS) ){
             ps.setString(1, name);
-            ps.setString(2, description);
-            ps.setString(3, price);
+            ps.setString(2, password);
+            ps.setString(3, address);
 
             // exécution de la requête
             nbRowModified = ps.executeUpdate();
@@ -168,6 +183,10 @@ public class DishRepositoryDB implements DishRepositoryInterface, Closeable {
             throw new RuntimeException(e);
         }
 
-        return String.valueOf(newId);
+        if (nbRowModified != 0) {
+            return String.valueOf(newId);
+        }
+
+        return null;
     }
 }

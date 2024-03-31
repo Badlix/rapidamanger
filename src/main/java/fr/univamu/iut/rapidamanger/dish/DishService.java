@@ -2,6 +2,7 @@ package fr.univamu.iut.rapidamanger.dish;
 
 import jakarta.json.bind.Jsonb;
 import jakarta.json.bind.JsonbBuilder;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 
@@ -65,10 +66,52 @@ public class DishService {
     /**
      * Méthode permettant de mettre à jours les informations d'un plat
      * @param id id du plat à mettre à jours
-     * @param dish les nouvelles infromations a été utiliser
-     * @return true si le plat a pu être mis à jours
+     * @param name le nouveau nom
+     * @param description la nouvelle description
+     * @param price le nouveau prix
+     * @return true si le plat a été mis à jour
      */
-    public boolean updateDish(String id, Dish dish) {
-        return dishRepo.updateDish(id, dish.name, dish.description, dish.price);
+    public String updateDish(String id, String name, String description, String price) {
+        String result = null;
+
+        // si le plat a été trouvé
+        if( dishRepo.updateDish(id, name, description, price) ) {
+            JSONObject updatedDish = new JSONObject();
+            updatedDish.put("id", id);
+            result = updatedDish.toString();
+        }
+
+        return result;
+    }
+
+    /**
+     * Méthode permettant de supprimer un plat
+     * @param id id du plat à supprimer
+     * @return true si le plat a pu être supprimé
+     */
+    public String deleteDish(String id) {
+        String result = null;
+
+        // si le plat a été trouvé
+        if( dishRepo.deleteDish(id) ) {
+            JSONObject deletedDish = new JSONObject();
+            deletedDish.put("id", id);
+            result = deletedDish.toString();
+        }
+        return result;
+    }
+
+    /**
+     * Méthode permettant de créer un plat
+     * @param name nom du plat à creer
+     * @param description description du plat à creer
+     * @param price prix du plat à creer
+     * @return true si le plat a pu être supprimé
+     */
+    public String createDish(String name, String description, String price) {
+        JSONObject result = new JSONObject();
+        String idOfNewDish = dishRepo.createDish(name, description, price);
+        result.put("id", idOfNewDish);
+        return result.toString();
     }
 }

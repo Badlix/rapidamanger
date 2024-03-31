@@ -1,4 +1,4 @@
-package fr.univamu.iut.rapidamanger.dish;
+package fr.univamu.iut.rapidamanger.user;
 
 import java.io.Closeable;
 import java.sql.Connection;
@@ -8,7 +8,7 @@ import java.util.ArrayList;
 /**
  * Classe permettant d'accèder aux plats stockés dans la base de données
  */
-public class DishRepository implements DishRepositoryInterface, Closeable {
+public class UserRepository implements UserRepositoryInterface, Closeable {
 
     /**
      * Accès à la base de données (session)
@@ -25,24 +25,23 @@ public class DishRepository implements DishRepositoryInterface, Closeable {
     }
 
     @Override
-    public Dish getDish(String id) {
+    public User getUser(String id) {
         return null;
     }
 
     @Override
-    public ArrayList<Dish> getAllDishs() {
+    public ArrayList<User> getAllUsers() {
         return null;
     }
 
     @Override
-    public boolean updateDish(String id, String name, String description, String price) {
+    public boolean updateUser(String id, String name, String password, String address) {
         return false;
     }
 
     @Override
-    public boolean deleteDish(String id){return false;}
+    public boolean deleteUser(String id){return false;}
 
     @Override
-    public String createDish(String name, String description, String price) {return null;}
-
+    public String createUser(String name, String password, String address) {return null;}
 }
