@@ -113,7 +113,7 @@ public class Dish {
     public String toString() {
         return "Dish{" +
                 "id='" + id + '\'' +
-                ", name='" + name + '\'' +
+                ", login='" + name + '\'' +
                 ", description='" + description + '\'' +
                 ", price=" + price +
                 '}';

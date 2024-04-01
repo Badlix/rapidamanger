@@ -11,9 +11,9 @@ public class User {
     protected String id;
 
     /**
-     * nom de l'utilisateur
+     * login de l'utilisateur
      */
-    protected String name;
+    protected String login;
 
     /**
      * Adresse de l'utilisateur
@@ -29,12 +29,12 @@ public class User {
     /**
      * Constructeur pour les requêtes GET, le mot de passe n'est pas initialisé pour des raisons de sécurité
      * @param id id de l'utilisateur
-     * @param name nom de l'utilisateur
+     * @param login nom de l'utilisateur
      * @param address adresse de l'utilisateur
      */
-    public User(String id, String name, String address){
+    public User(String id, String login, String address){
         this.id = id;
-        this.name = name;
+        this.login = login;
         this.address = address;
     }
 
@@ -50,8 +50,8 @@ public class User {
      * Méthode permettant d'accéder au nom de l'utilisateur
      * @return un chaîne de caractères avec le nom de l'utilisateur
      */
-    public String getName() {
-        return name;
+    public String getLogin() {
+        return login;
     }
 
     /**
@@ -72,10 +72,10 @@ public class User {
 
     /**
      * Méthode permettant de modifier le nom de l'utilisateur
-     * @param name une chaîne de caractères avec le nom à utiliser
+     * @param login une chaîne de caractères avec le nom à utiliser
      */
-    public void setName(String name) {
-        this.name = name;
+    public void setLogin(String login) {
+        this.login = login;
     }
 
     /**
@@ -90,7 +90,7 @@ public class User {
     public String toString() {
         return "User{" +
                 "id='" + id + '\'' +
-                ", name='" + name + '\'' +
+                ", login='" + login + '\'' +
                 ", address='" + address + '\'' +
                 '}';
     }

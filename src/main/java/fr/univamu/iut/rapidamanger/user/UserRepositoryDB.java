@@ -46,7 +46,7 @@ public class UserRepositoryDB implements UserRepositoryInterface, Closeable {
             // (si la référence du plat est valide)
             if( result.next() )
             {
-                String name = result.getString("name");
+                String name = result.getString("login");
                 String address = result.getString("address");
 
                 // création et initialisation de l'objet User
@@ -75,7 +75,7 @@ public class UserRepositoryDB implements UserRepositoryInterface, Closeable {
             while ( result.next() )
             {
                 String id = result.getString("id");
-                String name = result.getString("name");
+                String name = result.getString("login");
                 String address = result.getString("address");
 
                 // création du plat courant
@@ -94,9 +94,9 @@ public class UserRepositoryDB implements UserRepositoryInterface, Closeable {
         String query;
 
         if (password != null) {
-            query = "UPDATE User SET name=?, password=?, address=? where id=?";
+            query = "UPDATE User SET login=?, password=?, address=? where id=?";
         } else {
-            query = "UPDATE User SET name=?, address=? where id=?";
+            query = "UPDATE User SET login=?, address=? where id=?";
         }
 
         int nbRowModified = 0;
@@ -141,10 +141,10 @@ public class UserRepositoryDB implements UserRepositoryInterface, Closeable {
         return ( nbRowModified != 0 );
     }
 
-    // curl --request POST --header "Content-Type: application/json" --data '{"name":"testN", "password":"mdp", "address":"13090 Aix-en-Provence"}' http://localhost:8080/rapidamanger-1.0-SNAPSHOT/api/user
+    // curl --request POST --header "Content-Type: application/json" --data '{"login":"testN", "password":"mdp", "address":"13090 Aix-en-Provence"}' http://localhost:8080/rapidamanger-1.0-SNAPSHOT/api/user
     @Override
     public String createUser(String name, String password, String address) {
-        String query = "INSERT INTO `User`(`name`, `password`, `address`) VALUES (?,?,?)";
+        String query = "INSERT INTO `User`(`login`, `password`, `address`) VALUES (?,?,?)";
         int newId = -1;
         int nbRowModified = 0;
 

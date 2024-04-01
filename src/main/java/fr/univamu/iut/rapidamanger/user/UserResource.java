@@ -75,7 +75,7 @@ public class UserResource {
     public Response createUser(String userJson) {
         JSONObject obj = new JSONObject(userJson);
 
-        String result = service.createUser(obj.getString("name"), obj.getString("password"), obj.getString("address"));
+        String result = service.createUser(obj.getString("login"), obj.getString("password"), obj.getString("address"));
 
         return Response.ok(result).build();
     }
@@ -89,13 +89,13 @@ public class UserResource {
         JSONObject currentUser = new JSONObject(service.getUserJSON(id));
 
         // Initiate with the current value of the dish
-        String name = currentUser.getString("name");
+        String name = currentUser.getString("login");
         String password = null; // we initialiaze at null because the GET function doesn't give the password for security reasons
         String address = currentUser.getString("address");
 
         // Change the value present in the body of the PUT request with the new value
-        if (newValueOfUser.has("name")) {
-            name = newValueOfUser.getString("name");
+        if (newValueOfUser.has("login")) {
+            name = newValueOfUser.getString("login");
         }
         if (newValueOfUser.has("password")) {
             password = newValueOfUser.getString("password");
