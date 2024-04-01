@@ -66,19 +66,19 @@ public class UserService {
     /**
      * Méthode permettant de mettre à jours les informations d'un utilisateur
      * @param id id de l'utilisateur à mettre à jours
-     * @param name les nouvelles informations a été utiliser
+     * @param login les nouvelles informations a été utiliser
      * @param password les nouvelles informations a été utiliser
      * @param address les nouvelles informations a été utiliser
      * @return true si l'utilisateur a pu être mis à jours
      */
-    public String  updateUser(String id, String name, String password, String address) {
+    public String  updateUser(String id, String login, String password, String address) {
 
         String result = null;
 
         // si le plat a été trouvé
-        if( userRepo.updateUser(id, name, password, address) ) {
+        if( userRepo.updateUser(id, login, password, address) ) {
             JSONObject updatedUser = new JSONObject();
-            updatedUser.put("id", id);
+            updatedUser.put("id", Integer.parseInt(id));
             result = updatedUser.toString();
         }
 
@@ -95,22 +95,34 @@ public class UserService {
 
         // si l'utilisateur a été trouvé
         if( userRepo.deleteUser(id) ) {
-            result.put("id", id);
+            result.put("id", Integer.parseInt(id));
         }
         return result.toString();
     }
 
     /**
      * Méthode permettant de créer un utilisateur
-     * @param name nom de l'utilisateur à creer
+     * @param login nom de l'utilisateur à creer
      * @param password mot de passe de l'utilisateur à creer
      * @param address adresse de l'utilisateur à creer
      * @return true si le plat a pu être supprimé
      */
-    public String createUser(String name, String password, String address) {
+    public String createUser(String login, String password, String address) {
         JSONObject result = new JSONObject();
-        String idOfNewUser = userRepo.createUser(name, password, address);
-        result.put("id", idOfNewUser);
+        String idOfNewUser = userRepo.createUser(login, password, address);
+        result.put("id", Integer.parseInt(idOfNewUser));
         return result.toString();
+    }
+
+    public JSONObject authentificate(String login, String password) {
+        JSONObject result = new JSONObject();
+        String idOfNewUser = userRepo.authentificate(login, password);
+
+        try {
+            result.put("id", Integer.parseInt(idOfNewUser));
+        } catch (NumberFormatException e) {
+            result.put("id", false);
+        }
+        return result;
     }
 }

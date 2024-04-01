@@ -8,7 +8,7 @@ public class Dish {
     /**
      * Id du plat
      */
-    protected String id;
+    protected Integer id;
 
     /**
      * nom du plat
@@ -39,7 +39,7 @@ public class Dish {
      * @param price prix du plat
      */
     public Dish(String id, String name, String description, String price){
-        this.id = id;
+        this.id = Integer.parseInt(id);
         this.name = name;
         this.description = description;
         this.price = price;
@@ -49,7 +49,7 @@ public class Dish {
      * Méthode permettant d'accéder à l'id du plat
      * @return un chaîne de caractères avec lid du plat
      */
-    public String getId() {
+    public Integer getId() {
         return id;
     }
 
@@ -82,7 +82,7 @@ public class Dish {
      * @param id une chaîne de caractères avec l'id à utiliser
      */
     public void setId(String id) {
-        this.id = id;
+        this.id = Integer.parseInt(id);
     }
 
     /**
@@ -113,7 +113,7 @@ public class Dish {
     public String toString() {
         return "Dish{" +
                 "id='" + id + '\'' +
-                ", login='" + name + '\'' +
+                ", name='" + name + '\'' +
                 ", description='" + description + '\'' +
                 ", price=" + price +
                 '}';

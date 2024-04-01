@@ -77,7 +77,7 @@ public class DishService {
         // si le plat a été trouvé
         if( dishRepo.updateDish(id, name, description, price) ) {
             JSONObject updatedDish = new JSONObject();
-            updatedDish.put("id", id);
+            updatedDish.put("id", Integer.parseInt(id));
             result = updatedDish.toString();
         }
 
@@ -95,7 +95,7 @@ public class DishService {
         // si le plat a été trouvé
         if( dishRepo.deleteDish(id) ) {
             JSONObject deletedDish = new JSONObject();
-            deletedDish.put("id", id);
+            deletedDish.put("id", Integer.parseInt(id));
             result = deletedDish.toString();
         }
         return result;
@@ -111,7 +111,7 @@ public class DishService {
     public String createDish(String name, String description, String price) {
         JSONObject result = new JSONObject();
         String idOfNewDish = dishRepo.createDish(name, description, price);
-        result.put("id", idOfNewDish);
+        result.put("id", Integer.parseInt(idOfNewDish));
         return result.toString();
     }
 }

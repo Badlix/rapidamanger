@@ -58,7 +58,7 @@ public class DishRepositoryDB implements DishRepositoryInterface, Closeable {
             // (si la référence du plat est valide)
             if( result.next() )
             {
-                String name = result.getString("login");
+                String name = result.getString("name");
                 String description = result.getString("description");
                 String price = result.getString("price");
 
@@ -88,7 +88,7 @@ public class DishRepositoryDB implements DishRepositoryInterface, Closeable {
             while ( result.next() )
             {
                 String id = result.getString("id");
-                String name = result.getString("login");
+                String name = result.getString("name");
                 String description = result.getString("description");
                 String price = result.getString("price");
 

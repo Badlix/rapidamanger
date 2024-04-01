@@ -8,7 +8,7 @@ public class User {
     /**
      * Id de l'utilisateur
      */
-    protected String id;
+    protected Integer id;
 
     /**
      * login de l'utilisateur
@@ -33,7 +33,7 @@ public class User {
      * @param address adresse de l'utilisateur
      */
     public User(String id, String login, String address){
-        this.id = id;
+        this.id = Integer.parseInt(id);
         this.login = login;
         this.address = address;
     }
@@ -42,7 +42,7 @@ public class User {
      * Méthode permettant d'accéder à l'id de l'utilisateur
      * @return un chaîne de caractères avec lid de l'utilisateur
      */
-    public String getId() {
+    public Integer getId() {
         return id;
     }
 
@@ -67,7 +67,7 @@ public class User {
      * @param id une chaîne de caractères avec l'id à utiliser
      */
     public void setId(String id) {
-        this.id = id;
+        this.id = Integer.parseInt(id);
     }
 
     /**

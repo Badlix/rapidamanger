@@ -76,7 +76,7 @@ public class DishResource {
     public Response createDish(String dishJson) {
         JSONObject obj = new JSONObject(dishJson);
 
-        String result = service.createDish(obj.getString("login"), obj.getString("description"), obj.getString("price"));
+        String result = service.createDish(obj.getString("name"), obj.getString("description"), obj.getString("price"));
 
         // si la création a échoué
         if( result == null )
@@ -94,13 +94,13 @@ public class DishResource {
         JSONObject currentDish = new JSONObject(service.getDishJSON(id));
 
         // Initiate with the current value of the dish
-        String name = currentDish.getString("login");
+        String name = currentDish.getString("name");
         String description = currentDish.getString("description");
         String price = currentDish.getString("price");
 
         // Change the value present in the body of the PUT request with the new value
-        if (newValueOfDish.has("login")) {
-            name = newValueOfDish.getString("login");
+        if (newValueOfDish.has("name")) {
+            name = newValueOfDish.getString("name");
         }
         if (newValueOfDish.has("description")) {
             description = newValueOfDish.getString("description");

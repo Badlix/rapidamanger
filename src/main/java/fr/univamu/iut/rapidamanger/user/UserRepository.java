@@ -35,7 +35,7 @@ public class UserRepository implements UserRepositoryInterface, Closeable {
     }
 
     @Override
-    public boolean updateUser(String id, String name, String password, String address) {
+    public boolean updateUser(String id, String login, String password, String address) {
         return false;
     }
 
@@ -43,5 +43,8 @@ public class UserRepository implements UserRepositoryInterface, Closeable {
     public boolean deleteUser(String id){return false;}
 
     @Override
-    public String createUser(String name, String password, String address) {return null;}
+    public String createUser(String login, String password, String address) {return null;}
+
+    @Override
+    public String authentificate(String login, String password) {return null;}
 }

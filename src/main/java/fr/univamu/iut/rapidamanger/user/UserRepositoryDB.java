@@ -46,11 +46,11 @@ public class UserRepositoryDB implements UserRepositoryInterface, Closeable {
             // (si la référence du plat est valide)
             if( result.next() )
             {
-                String name = result.getString("login");
+                String login = result.getString("login");
                 String address = result.getString("address");
 
                 // création et initialisation de l'objet User
-                selectedUser = new User(id, name, address);
+                selectedUser = new User(id, login, address);
             }
         } catch (SQLException e) {
             throw new RuntimeException(e);
@@ -75,11 +75,11 @@ public class UserRepositoryDB implements UserRepositoryInterface, Closeable {
             while ( result.next() )
             {
                 String id = result.getString("id");
-                String name = result.getString("login");
+                String login = result.getString("login");
                 String address = result.getString("address");
 
                 // création du plat courant
-                User currentUser = new User(id, name, address);
+                User currentUser = new User(id, login, address);
 
                 listUsers.add(currentUser);
             }
@@ -90,7 +90,7 @@ public class UserRepositoryDB implements UserRepositoryInterface, Closeable {
     }
 
     @Override
-    public boolean updateUser(String id, String name, String password, String address) {
+    public boolean updateUser(String id, String login, String password, String address) {
         String query;
 
         if (password != null) {
@@ -103,7 +103,7 @@ public class UserRepositoryDB implements UserRepositoryInterface, Closeable {
 
         // construction et exécution d'une requête préparée
         try ( PreparedStatement ps = dbConnection.prepareStatement(query) ){
-            ps.setString(1, name);
+            ps.setString(1, login);
 
             if (password != null) {
                 ps.setString(2, password);
@@ -143,14 +143,14 @@ public class UserRepositoryDB implements UserRepositoryInterface, Closeable {
 
     // curl --request POST --header "Content-Type: application/json" --data '{"login":"testN", "password":"mdp", "address":"13090 Aix-en-Provence"}' http://localhost:8080/rapidamanger-1.0-SNAPSHOT/api/user
     @Override
-    public String createUser(String name, String password, String address) {
+    public String createUser(String login, String password, String address) {
         String query = "INSERT INTO `User`(`login`, `password`, `address`) VALUES (?,?,?)";
         int newId = -1;
         int nbRowModified = 0;
 
         // construction et exécution d'une requête préparée
         try ( PreparedStatement ps = dbConnection.prepareStatement(query, Statement.RETURN_GENERATED_KEYS) ){
-            ps.setString(1, name);
+            ps.setString(1, login);
             ps.setString(2, password);
             ps.setString(3, address);
 
@@ -172,5 +172,34 @@ public class UserRepositoryDB implements UserRepositoryInterface, Closeable {
         }
 
         return null;
+    }
+
+    @Override
+    public String authentificate(String login, String password) {
+        String query = "SELECT id FROM `User` where login=? and password=?";
+        int userId = -1;
+
+        // construction et exécution d'une requête préparée
+        try ( PreparedStatement ps = dbConnection.prepareStatement(query, Statement.RETURN_GENERATED_KEYS) ){
+            ps.setString(1, login);
+            ps.setString(2, password);
+
+            // exécution de la requête
+            ResultSet rs = ps.executeQuery();
+
+            // vérification si le résultat contient des données
+            if (rs.next()) {
+                userId = rs.getInt("id"); // récupération de la colonne "id" du résultat
+            }
+
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+
+        if (userId == -1) {
+            return String.valueOf(false);
+        }
+
+        return String.valueOf(userId);
     }
 }

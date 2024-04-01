@@ -59,8 +59,8 @@ public class UserResource {
     @DELETE
     @Path("{id}")
     @Produces("application/json")
-    public Response deleteDish(@PathParam("id") String reference) {
-        String result = service.deleteUser(reference);
+    public Response deleteDish(@PathParam("id") String id) {
+        String result = service.deleteUser(id);
 
         // si l'utilisateur n'a pas été trouvé
         if( result == null )
@@ -80,6 +80,18 @@ public class UserResource {
         return Response.ok(result).build();
     }
 
+    @POST
+    @Path("{login}")
+    @Consumes("application/json")
+    @Produces("application/json")
+    public Response checkAuthentification(@PathParam("login") String login, String passwordJson) {
+        String password = new JSONObject(passwordJson).getString("password");
+
+        JSONObject result = service.authentificate(login, password);
+
+        return Response.ok(result.toString()).build();
+    }
+
     @PUT
     @Path("{id}")
     @Consumes("application/json")
@@ -89,13 +101,13 @@ public class UserResource {
         JSONObject currentUser = new JSONObject(service.getUserJSON(id));
 
         // Initiate with the current value of the dish
-        String name = currentUser.getString("login");
+        String login = currentUser.getString("login");
         String password = null; // we initialiaze at null because the GET function doesn't give the password for security reasons
         String address = currentUser.getString("address");
 
         // Change the value present in the body of the PUT request with the new value
         if (newValueOfUser.has("login")) {
-            name = newValueOfUser.getString("login");
+            login = newValueOfUser.getString("login");
         }
         if (newValueOfUser.has("password")) {
             password = newValueOfUser.getString("password");
@@ -104,7 +116,7 @@ public class UserResource {
             address = newValueOfUser.getString("address");
         }
 
-        String result = service.updateUser(id, name, password, address);
+        String result = service.updateUser(id, login, password, address);
 
         // si le plat n'a pas été trouvé ou que la modification a échoué
         if( result == null )
