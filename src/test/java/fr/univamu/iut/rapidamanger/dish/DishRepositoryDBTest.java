@@ -63,7 +63,7 @@ class DishRepositoryDBTest {
         int randomInt = rand.nextInt(100);
         dishRepo.updateDish("2", "Nom du Plat 2", "Description du Plat 2", String.valueOf(randomInt));
 
-        assertEquals(randomInt, (int) Double.parseDouble(dishRepo.getDish("2").price));
+        assertEquals(randomInt, (int) Double.parseDouble(String.valueOf(dishRepo.getDish("2").price)));
     }
 
     @Test

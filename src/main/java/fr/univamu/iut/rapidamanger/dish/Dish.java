@@ -23,7 +23,7 @@ public class Dish {
     /**
      * Prix du plat
      */
-    protected String price;
+    protected Float price;
 
     /**
      * Constructeur par défaut
@@ -42,7 +42,7 @@ public class Dish {
         this.id = Integer.parseInt(id);
         this.name = name;
         this.description = description;
-        this.price = price;
+        this.price = Float.valueOf(price);
     }
 
     /**
@@ -73,7 +73,7 @@ public class Dish {
      * Méthode permettant d'accéder au prix du plat
      * @return un caractère indiquant le prix du plat
      */
-    public String getPrice() {
+    public Float getPrice() {
         return price;
     }
 
@@ -106,7 +106,7 @@ public class Dish {
      * @param price une chaîne de caractère avec le prix du plat
      */
     public void setPrice(String price) {
-        this.price = price;
+        this.price = Float.valueOf(price);
     }
 
     @Override
