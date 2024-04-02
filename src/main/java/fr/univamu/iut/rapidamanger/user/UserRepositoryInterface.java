@@ -50,5 +50,11 @@ public interface UserRepositoryInterface {
      */
     public String createUser( String login, String password, String address );
 
+    /**
+     * Méthode permettant de vérifier l'authentification d'un utilisateur
+     * @param login nom de l'utilisateur dont il faut vérifier le mot de passe
+     * @param password mot de passe entré par l'utilisateur
+     * @return l'id de l'utilisateur si l'authentification est bonne, ou false si l'authentification est mauvaise
+     */
     public String authentificate(String login, String password);
 }

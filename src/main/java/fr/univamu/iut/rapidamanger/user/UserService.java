@@ -114,6 +114,12 @@ public class UserService {
         return result.toString();
     }
 
+    /**
+     * Méthode permettant de vérifier l'authentification d'un utilisateur
+     * @param login nom de l'utilisateur dont il faut vérifier
+     * @param password mot de passe entré par l'utilisateur
+     * @return l'id de l'utilisateur si l'authentification est bonne et false si l'authentification a échoué
+     */
     public JSONObject authentificate(String login, String password) {
         JSONObject result = new JSONObject();
         String idOfNewUser = userRepo.authentificate(login, password);
