@@ -41,8 +41,6 @@ public class RapidamangerApplication extends Application {
         UserRepositoryDB dbUser = new UserRepositoryDB(dbConnection);
         userService = new UserService(dbUser);
 
-        // Création de la ressource en lui passant paramètre les services à exécuter en fonction
-        // des différents endpoints proposés (i.e. requêtes HTTP acceptées)
         set.add(new DishResource(dishService));
         set.add(new UserResource(userService));
 
