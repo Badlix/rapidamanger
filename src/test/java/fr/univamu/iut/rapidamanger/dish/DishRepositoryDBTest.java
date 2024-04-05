@@ -37,7 +37,7 @@ class DishRepositoryDBTest {
         assertEquals(1, result.id);
         assertEquals("Nom du Plat 1", result.name);
         assertEquals("Description du Plat 1", result.description);
-        assertEquals("1.50", result.price);
+        assertEquals(Float.valueOf(1.50F), result.price);
     }
 
     @Test
@@ -64,6 +64,11 @@ class DishRepositoryDBTest {
         dishRepo.updateDish("2", "Nom du Plat 2", "Description du Plat 2", String.valueOf(randomInt));
 
         assertEquals(randomInt, (int) Double.parseDouble(String.valueOf(dishRepo.getDish("2").price)));
+    }
+
+    @Test
+    void updateDishWithDishIdNonExistent() {
+       assertFalse(dishRepo.updateDish("4561", "Nom du Plat 2", "Description du Plat 2", "3"));
     }
 
     @Test

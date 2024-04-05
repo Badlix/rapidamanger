@@ -4,6 +4,8 @@ import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.Response;
 import org.json.JSONObject;
 
+import java.io.IOException;
+
 @Path("/dish")
 public class DishResource {
 
@@ -59,7 +61,7 @@ public class DishResource {
     @DELETE
     @Path("{id}")
     @Produces("application/json")
-    public Response deleteDish(@PathParam("id") String id) {
+    public Response deleteDish(@PathParam("id") String id) throws IOException {
 
         String result = service.deleteDish(id);
 

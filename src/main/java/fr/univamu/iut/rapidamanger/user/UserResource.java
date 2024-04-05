@@ -45,9 +45,9 @@ public class UserResource {
     @GET
     @Path("{id}")
     @Produces("application/json")
-    public Response getUser(@PathParam("id") String reference){
+    public Response getUser(@PathParam("id") String id){
 
-        String result = service.getUserJSON(reference);
+        String result = service.getUserJSON(id);
 
         // si l'utilisateur n'a pas été trouvé
         if( result == null )

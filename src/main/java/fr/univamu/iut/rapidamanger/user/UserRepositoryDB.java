@@ -14,10 +14,17 @@ public class UserRepositoryDB implements UserRepositoryInterface, Closeable {
      */
     protected Connection dbConnection ;
 
+    /**
+     * Constructeur de la classe
+     * @param connection Connexion à la base de données
+     */
     public UserRepositoryDB(Connection connection) {
         this.dbConnection = connection;
     }
 
+    /**
+     * Méthode permettant de fermer la connexion à la base de données
+     */
     @Override
     public void close() {
         try{
@@ -28,6 +35,11 @@ public class UserRepositoryDB implements UserRepositoryInterface, Closeable {
         }
     }
 
+    /**
+     * Méthode permettant de récupérer un utilisateur à partir de son identifiant
+     * @param id identifiant de l'utilisateur recherché
+     * @return un objet User représentant l'utilisateur recherché, ou null s'il n'existe pas
+     */
     @Override
     public User getUser(String id) {
 
@@ -58,6 +70,10 @@ public class UserRepositoryDB implements UserRepositoryInterface, Closeable {
         return selectedUser;
     }
 
+    /**
+     * Méthode permettant de récupérer la liste de tous les utilisateurs
+     * @return une liste d'objets User
+     */
     @Override
     public ArrayList<User> getAllUsers() {
         ArrayList<User> listUsers;
@@ -89,6 +105,14 @@ public class UserRepositoryDB implements UserRepositoryInterface, Closeable {
         return listUsers;
     }
 
+    /**
+     * Méthode permettant de mettre à jour un utilisateur
+     * @param id identifiant de l'utilisateur à mettre à jour
+     * @param login nouveau login de l'utilisateur
+     * @param password nouveau mot de passe de l'utilisateur
+     * @param address nouvelle adresse de l'utilisateur
+     * @return true si l'utilisateur existe et la mise à jour a été faite, false sinon
+     */
     @Override
     public boolean updateUser(String id, String login, String password, String address) {
         String query;
@@ -123,6 +147,11 @@ public class UserRepositoryDB implements UserRepositoryInterface, Closeable {
         return ( nbRowModified != 0 );
     }
 
+    /**
+     * Méthode permettant de supprimer un utilisateur
+     * @param id identifiant de l'utilisateur à supprimer
+     * @return true si l'utilisateur a été supprimé avec succès, false sinon
+     */
     @Override
     public boolean deleteUser(String id) {
         String query = "DELETE FROM User where id=?";
@@ -141,7 +170,13 @@ public class UserRepositoryDB implements UserRepositoryInterface, Closeable {
         return ( nbRowModified != 0 );
     }
 
-    // curl --request POST --header "Content-Type: application/json" --data '{"login":"testN", "password":"mdp", "address":"13090 Aix-en-Provence"}' http://localhost:8080/rapidamanger-1.0-SNAPSHOT/api/user
+    /**
+     * Méthode permettant de créer un nouvel utilisateur
+     * @param login login du nouvel utilisateur
+     * @param password mot de passe du nouvel utilisateur
+     * @param address adresse du nouvel utilisateur
+     * @return l'identifiant du nouvel utilisateur créé, ou null en cas d'échec
+     */
     @Override
     public String createUser(String login, String password, String address) {
         String query = "INSERT INTO `User`(`login`, `password`, `address`) VALUES (?,?,?)";
@@ -174,6 +209,12 @@ public class UserRepositoryDB implements UserRepositoryInterface, Closeable {
         return null;
     }
 
+    /**
+     * Méthode permettant d'authentifier un utilisateur
+     * @param login login de l'utilisateur à authentifier
+     * @param password mot de passe de l'utilisateur à authentifier
+     * @return l'identifiant de l'utilisateur si l'authentification est réussie, false sinon
+     */
     @Override
     public String authentificate(String login, String password) {
         String query = "SELECT id FROM `User` where login=? and password=?";

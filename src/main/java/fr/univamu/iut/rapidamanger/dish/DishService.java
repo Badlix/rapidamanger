@@ -2,8 +2,19 @@ package fr.univamu.iut.rapidamanger.dish;
 
 import jakarta.json.bind.Jsonb;
 import jakarta.json.bind.JsonbBuilder;
+import org.apache.http.client.methods.HttpDelete;
+import org.apache.http.client.methods.HttpPut;
+import org.apache.http.entity.StringEntity;
+import org.apache.http.impl.client.HttpClientBuilder;
+import org.checkerframework.checker.units.qual.A;
+import org.json.JSONArray;
 import org.json.JSONObject;
 
+import java.io.*;
+import java.net.*;
+import java.net.http.HttpClient;
+import java.net.http.HttpRequest;
+import java.net.http.HttpResponse;
 import java.util.ArrayList;
 
 public class DishService {
@@ -97,8 +108,70 @@ public class DishService {
             JSONObject deletedDish = new JSONObject();
             deletedDish.put("id", Integer.parseInt(id));
             result = deletedDish.toString();
+
+            /*System.out.println(deletedDish);
+            deleteMenuWithDeletedDish(deletedDish);
+            result = deleteMenuWithDeletedDish(deletedDish);*/
         }
         return result;
+    }
+
+    public String deleteMenuWithDeletedDish(JSONObject deletedDish) throws IOException {
+
+        // GET ALL MENU ID
+
+        String jsonResponse = "";
+        try {
+            String uri = "http://51.15.238.170:8080/rapidamanger-menu-1.0-SNAPSHOT/api/menu";
+            URL url = new URL(uri);
+            HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+            connection.setRequestMethod("GET");
+
+            int responseCode = connection.getResponseCode();
+            if (responseCode == HttpURLConnection.HTTP_OK) {
+                BufferedReader in = new BufferedReader(new InputStreamReader(connection.getInputStream()));
+                String inputLine;
+                StringBuilder response = new StringBuilder();
+
+                while ((inputLine = in.readLine()) != null) {
+                    response.append(inputLine);
+                }
+                in.close();
+
+                jsonResponse = response.toString();
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        JSONArray listMenu = new JSONArray(jsonResponse);
+        ArrayList<Integer> listMenuId = new ArrayList<>();
+
+        for (int i = 0; i < listMenu.length(); i++) {
+            listMenuId.add(listMenu.getJSONObject(i).getInt("id_menu"));
+        }
+
+        // DELETE LE PLAT POUR LES MENUS QU'IL LE POSSÈDE
+
+        for (int id : listMenuId) {
+            JSONObject jsonRequest = new JSONObject();
+            jsonRequest.put("dish_id", String.valueOf(deletedDish.getInt("id")));
+            String requestBody = jsonRequest.toString();
+
+            String uri = "http://51.15.238.170:8080/rapidamanger-menu-1.0-SNAPSHOT/api/menu/" + id + "/remove";
+            URL url = new URL(uri);
+            HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+            connection.setRequestMethod("PUT");
+            connection.setRequestProperty("Content-Type", "application/json");
+            connection.setDoOutput(true);
+
+            // Envoi des données JSON
+            OutputStream os = connection.getOutputStream();
+            byte[] input = requestBody.getBytes("utf-8");
+            os.write(input, 0, input.length);
+        }
+
+        return listMenuId.toString();
     }
 
     /**
