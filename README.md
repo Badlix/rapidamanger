@@ -16,24 +16,158 @@ Dépendances xml à rajouter au Projet Jakarta pour faire fonctionner l'API :
   <version>20240303</version>
 </dependency>```
 
-# Description des fonctionnalités
+# Fonctionnalités Plats et Utilisateurs  
 
-route /user
+Mathieu Leroux - BUT2-A1
 
-GET : permet de récupérer la liste des utilisateurs, les requêtes GET ne revoient pas le champs "password" de l'utilisateur
+## Route /user
 
-POST : permet de créer un utilisateur, le corps de la requete doit comporter, le login, le mot de passe et l'adresse de l'utilisateur. La requete renvoit l'id de l'utilisateur crée.
+ - Lien : [http://51.15.238.170:8080/rapidamanger-1.0-SNAPSHOT-moi/api/user]
 
-route /user/{id}
+### GET
+ Permet de récupérer la liste des utilisateurs sous formes d'un array json. 
+ (voir get /user/{id})
 
-GET : permet de récupérer un utilisateur selon un id, pour des raison de sécurité, les requêtes GET ne revoient pas le champs "password" de l'utilisateur
+### POST
+Permet de créer un utilisateur.
+Entrée :
+```json
+{
+	"name": "...",
+	"password": "...",
+	"address": "..."
+}
+```
+Sortie, renvoie l'id de l'utilisateur crée :
+```json
+{
+	"id": 1
+}
+```	
+  
+## Route /user/{id}
 
-DELETE : permet de supprimer un utilisateur selon un id.  La requete renvoit l'id de l'utilisateur supprimer.
+### GET
+ Permet de récupérer un utilisateur selon id .
+ Le mot de passe n'est volontairement pas renvoyé pour des raisons de sécurité.
+Sortie :
+```json
+{
+	"id":1,
+	"login":"Mathieu",
+	"address":"La Bouilladisse"
+}
+```	
 
-PUT : permet de modifier certains champs de l'utilisateir selon un id, les champs à modifier ainsi que leurs nouvelles valeurs devront être précisé dans le corps de la requête. La requete renvoit l'id de l'utilisateur modifié.
+### PUT
+Permet de modifier un utilisateur.
+Il est possible de modifier le nom, le mot de passe et l'adresse.
+Entrée :
+```json
+{
+	"name": "newName",
+	"password": "newPassword"
+}
+```
+Sortie, renvoie l'id de l'utilisateur modifié :
+```json
+{
+	"id": 1
+}
+```	
 
-route /user/{login}
+### DELETE
+ Permet de supprimer un utilisateur selon id .
+Sortie, renvoie l'id de l'utilisateur supprimé :
+```json
+{
+	"id":1,
+}
+```	
 
-GET : cette requête prend un paramètre un mot de passe. Si le mot de passe correspond au login présent dans la requête, alors la requête renvoit l'id de l'utilisateur, sinon la requête renvoit false.
+## Route /user/{name}
 
+### POST
+ Permet de vérifier l'authentification d'un utilisateur .
+ Entrée :
+```json
+{
+	"password": "...",
+}
+```
+Sortie, si l'authentification a réussie, l'id de l'utilisateur connecté est renvoyé :
+```json
+{
+	"id":1,
+}
+```	
+Sortie, si l'authentification a échoué :
+```json
+{
+	"id":false,
+}
+```	
 
+## Route /dish
+
+ - Lien : [http://51.15.238.170:8080/rapidamanger-1.0-SNAPSHOT-moi/api/dish]
+
+### GET
+ Permet de récupérer la liste des plats sous formes d'un array json. 
+ (voir get /dish/{id})
+
+### POST
+Permet de créer un plat.
+Entrée :
+```json
+{
+	"name": "...",
+	"description": "...",
+	"price": "..."
+}
+```
+Sortie, renvoie l'id du plat crée :
+```json
+{
+	"id": 1
+}
+```	
+  
+## Route /dish/{id}
+
+### GET
+ Permet de récupérer un plat selon id .
+Sortie :
+```json
+{
+	"id":1,
+	"name":"Carbonara",
+	"description":"des pâtes",
+	"price": 8.0
+}
+```	
+
+### PUT
+Permet de modifier un plat.
+Il est possible de modifier le nom, la description et le prix du plat.
+Entrée :
+```json
+{
+	"description": "newDescription"
+}
+```
+Sortie, renvoie l'id du plat modifié :
+```json
+{
+	"id": 1
+}
+```	
+
+### DELETE
+ Permet de supprimer un plat selon id .
+Sortie, renvoie l'id du plat supprimé :
+```json
+{
+	"id":1,
+}
+```	
