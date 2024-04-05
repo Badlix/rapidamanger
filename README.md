@@ -28,6 +28,9 @@ Mathieu Leroux - BUT2-A1
  Permet de récupérer la liste des utilisateurs sous formes d'un array json. 
  (voir get /user/{id})
 
+```curl --request "GET" http://51.15.238.170:8080/rapidamanger-1.0-SNAPSHOT-moi/api/user```
+
+
 ### POST
 Permet de créer un utilisateur.
 Entrée :
@@ -44,6 +47,8 @@ Sortie, renvoie l'id de l'utilisateur crée :
 	"id": 1
 }
 ```	
+
+```curl --request POST --header "Content-Type: application/json" --data '{"login":"testName", "password":"testPwd", "address":"testAddress"}' http://51.15.238.170:8080/rapidamanger-1.0-SNAPSHOT-moi/api/user```
   
 ## Route /user/{id}
 
@@ -58,6 +63,8 @@ Sortie :
 	"address":"La Bouilladisse"
 }
 ```	
+
+```curl --request "GET" http://51.15.238.170:8080/rapidamanger-1.0-SNAPSHOT-moi/api/user/4```
 
 ### PUT
 Permet de modifier un utilisateur.
@@ -75,6 +82,7 @@ Sortie, renvoie l'id de l'utilisateur modifié :
 	"id": 1
 }
 ```	
+```curl --request PUT --header "Content-Type: application/json" --data '{"address":"Une Adresse"}' http://51.15.238.170:8080/rapidamanger-1.0-SNAPSHOT-moi/api/user/3```
 
 ### DELETE
  Permet de supprimer un utilisateur selon id .
@@ -84,6 +92,7 @@ Sortie, renvoie l'id de l'utilisateur supprimé :
 	"id":1,
 }
 ```	
+```curl --request "DELETE" http://51.15.238.170:8080/rapidamanger-1.0-SNAPSHOT-moi/api/user/8```
 
 ## Route /user/{name}
 
@@ -107,6 +116,7 @@ Sortie, si l'authentification a échoué :
 	"id":false,
 }
 ```	
+```curl --request POST --header "Content-Type: application/json" --data '{"password":"***"}' http://51.15.238.170:8080/rapidamanger-1.0-SNAPSHOT-moi/api/user/Mathieu```
 
 ## Route /dish
 
@@ -115,6 +125,7 @@ Sortie, si l'authentification a échoué :
 ### GET
  Permet de récupérer la liste des plats sous formes d'un array json. 
  (voir get /dish/{id})
+ ```curl --request "GET" http://51.15.238.170:8080/rapidamanger-1.0-SNAPSHOT-moi/api/dish```
 
 ### POST
 Permet de créer un plat.
@@ -132,6 +143,7 @@ Sortie, renvoie l'id du plat crée :
 	"id": 1
 }
 ```	
+```curl --request POST --header "Content-Type: application/json" --data '{"name":"***", "description":"***","price":"4"}' http://51.15.238.170:8080/rapidamanger-1.0-SNAPSHOT-moi/api/dish```
   
 ## Route /dish/{id}
 
@@ -146,6 +158,7 @@ Sortie :
 	"price": 8.0
 }
 ```	
+```curl --request "GET" http://51.15.238.170:8080/rapidamanger-1.0-SNAPSHOT-moi/api/dish/4```
 
 ### PUT
 Permet de modifier un plat.
@@ -162,6 +175,7 @@ Sortie, renvoie l'id du plat modifié :
 	"id": 1
 }
 ```	
+```curl --request PUT --header "Content-Type: application/json" --data '{"price":"12"}' http://51.15.238.170:8080/rapidamanger-1.0-SNAPSHOT-moi/api/dish/10```
 
 ### DELETE
  Permet de supprimer un plat selon id .
@@ -171,3 +185,4 @@ Sortie, renvoie l'id du plat supprimé :
 	"id":1,
 }
 ```	
+```curl --request "DELETE" http://51.15.238.170:8080/rapidamanger-1.0-SNAPSHOT-moi/api/dish/26```
